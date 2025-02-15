@@ -3,6 +3,9 @@ import { UsersModule } from './modules/users/users.module';
 import { KyselyModule } from 'nestjs-kysely';
 import { PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
+import { TodosModule } from './modules/todos/todos.module';
+import { StepsModule } from './modules/steps/steps.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [KyselyModule.forRoot({
@@ -14,6 +17,9 @@ import { Pool } from 'pg';
         password: 'npg_P9cA5BRENWDl', ssl: true
       }),
     }),
-  }), UsersModule],
+  }), UsersModule,
+    CategoriesModule,
+    TodosModule,
+    StepsModule,],
 })
 export class AppModule {}
