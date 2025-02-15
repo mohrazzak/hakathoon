@@ -3,19 +3,28 @@ import { UsersModule } from './modules/users/users.module';
 import { KyselyModule } from 'nestjs-kysely';
 import { PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
+import { TodosModule } from './modules/todos/todos.module';
+import { StepsModule } from './modules/steps/steps.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
-  imports: [KyselyModule.forRoot({
-    dialect: new PostgresDialect({
-      pool: new Pool({
-        database: process.env.PGDATABASE,
-        host: process.env.PGHOST,
-        user: process.env.PGUSER,
-        password: process.env.PGPASSWORD,
-        port: 5434,
-        max: 10,
+  imports: [
+    KyselyModule.forRoot({
+      dialect: new PostgresDialect({
+        pool: new Pool({
+          database: process.env.PGDATABASE,
+          host: process.env.PGHOST,
+          user: process.env.PGUSER,
+          password: process.env.PGPASSWORD,
+          port: 5434,
+          max: 10,
+        }),
       }),
     }),
-  }), UsersModule,]
+    UsersModule,
+    CategoriesModule,
+    TodosModule,
+    StepsModule,
+  ],
 })
 export class AppModule {}
