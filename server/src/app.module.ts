@@ -8,14 +8,12 @@ import { Pool } from 'pg';
   imports: [KyselyModule.forRoot({
     dialect: new PostgresDialect({
       pool: new Pool({
-        database: process.env.PGDATABASE,
-        host: process.env.PGHOST,
-        user: process.env.PGUSER,
-        password: process.env.PGPASSWORD,
-        port: 5434,
-        max: 10,
+        database: 'neondb',
+        host: 'ep-twilight-frog-a2kdmfjc-pooler.eu-central-1.aws.neon.tech',
+        user: 'neondb_owner',
+        password: 'npg_P9cA5BRENWDl', ssl: true
       }),
     }),
-  }), UsersModule,]
+  }), UsersModule],
 })
 export class AppModule {}
