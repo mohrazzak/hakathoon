@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+
+  // Optionally provide a destination directory for the generated file
+  // and a filename of your choice
+  output       = "../src/core"
+  fileName     = "types.ts"
+  // Optionally generate runtime enums to a separate file
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id               String    @id @default(uuid())
+  first_name       String
+  last_name        String
+  email            String    @unique
+  password         String
+  reset_pass_token String    @unique
+  todos            todo[]
+  created_at       DateTime  @default(now())
+  deleted_at       DateTime?
+  updated_at       DateTime  @updatedAt
+}
+
+model category {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  todos       todo[]
+  created_at  DateTime  @default(now())
+  deleted_at  DateTime?
+  updated_at  DateTime  @updatedAt
+}
+
+enum PRIORITY {
+  LOW
+  MEDIUM
+  HEIGH
+}
+
+enum STATUS {
+  PENDING
+  ACTIVE
+  DONE
+}
+
+model todo {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  status      STATUS
+  priority    PRIORITY
+  deadline    DateTime
+  start_date  DateTime
+  user_id     String
+  steps       step[]
+  user        user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category_id String?
+  category    category? @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  created_at  DateTime  @default(now())
+  deleted_at  DateTime?
+  updated_at  DateTime  @updatedAt
+}
+
+model step {
+  id          String    @id @default(uuid())
+  order       Int
+  title       String
+  description String
+  todo_id     String
+  todo        todo      @relation(fields: [todo_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  created_at  DateTime  @default(now())
+  deleted_at  DateTime?
+  updated_at  DateTime  @updatedAt
+
+  @@unique([order, todo_id])
+}
